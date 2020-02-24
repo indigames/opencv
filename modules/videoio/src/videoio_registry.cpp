@@ -135,6 +135,13 @@ static const struct VideoBackendInfo builtin_backends[] =
 #ifdef HAVE_ANDROID_MEDIANDK
     DECLARE_STATIC_BACKEND(CAP_ANDROID, "ANDROID_MEDIANDK", MODE_CAPTURE_BY_FILENAME, createAndroidCapture_file, 0, 0),
 #endif
+
+// [IGE]: Add native camera support
+#ifdef HAVE_ANDROID_NATIVE_CAMERA
+    DECLARE_STATIC_BACKEND(CAP_ANDROID, "ANDROID_NATIVE_CAMERA", MODE_CAPTURE_BY_INDEX, createAndroidCapture_cam, 0, 0),
+#endif
+// [/IGE]
+
     // dropped backends: MIL, TYZX
 };
 

@@ -365,6 +365,11 @@ int CvCaptureCAM::startCaptureDevice(int cameraNum) {
         [mCaptureDecompressedVideoOutput setSampleBufferDelegate:capture queue:queue];
         dispatch_release(queue);
 
+    // [IGE]: modified, moved from below
+        mCaptureSession.sessionPreset = AVCaptureSessionPreset640x480; // 640 * 480
+        width = 640;
+        height = 480;
+    // [IGE/]
 
         NSDictionary *pixelBufferOptions ;
         if (width > 0 && height > 0) {
@@ -386,15 +391,19 @@ int CvCaptureCAM::startCaptureDevice(int cameraNum) {
         mCaptureDecompressedVideoOutput.alwaysDiscardsLateVideoFrames = YES;
 
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-        mCaptureDecompressedVideoOutput.minFrameDuration = CMTimeMake(1, 30);
+    // [IGE]: Should capture at 60 FPS
+        mCaptureDecompressedVideoOutput.minFrameDuration = CMTimeMake(1, 60);
+    // [/IGE]
 #endif
 
         //Slow. 1280*720 for iPhone4, iPod back camera. 640*480 for front camera
         //mCaptureSession.sessionPreset = AVCaptureSessionPresetHigh; // fps ~= 5 slow for OpenCV
 
-        mCaptureSession.sessionPreset = AVCaptureSessionPresetMedium; //480*360
-        if (width == 0 ) width = 480;
-        if (height == 0 ) height = 360;
+    // [IGE]: modified, moved above
+        // mCaptureSession.sessionPreset = AVCaptureSessionPresetMedium; //480*360
+        // if (width == 0 ) width = 480;
+        // if (height == 0 ) height = 360;
+    // [IGE/]
 
         [mCaptureSession addInput:mCaptureDeviceInput];
         [mCaptureSession addOutput:mCaptureDecompressedVideoOutput];

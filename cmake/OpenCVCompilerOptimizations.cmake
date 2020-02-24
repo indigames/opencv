@@ -323,6 +323,13 @@ if(X86 OR X86_64)
     endif()
   endif()
 
+# [IGE]: Always enable NEON on Android ARM  
+elseif((ANDROID_ABI STREQUAL "armeabi-v7a") OR (ANDROID_ABI STREQUAL "arm64-v8a"))
+    ocv_update(CPU_KNOWN_OPTIMIZATIONS "NEON;FP16")
+    ocv_update(CPU_NEON_FLAGS_ON "")
+    ocv_update(CPU_FP16_IMPLIES "NEON")
+    set(CPU_BASELINE "NEON;FP16" CACHE STRING "${HELP_CPU_BASELINE}")
+# [/IGE]
 elseif(ARM OR AARCH64)
   ocv_update(CPU_NEON_TEST_FILE "${OpenCV_SOURCE_DIR}/cmake/checks/cpu_neon.cpp")
   ocv_update(CPU_FP16_TEST_FILE "${OpenCV_SOURCE_DIR}/cmake/checks/cpu_fp16.cpp")

@@ -40,3 +40,8 @@ add_backend("dshow" WITH_DSHOW)
 add_backend("msmf" WITH_MSMF)
 
 add_backend("android_mediandk" WITH_ANDROID_MEDIANDK)
+
+# [IGE]: Add android camera
+add_backend("android_camera" WITH_ANDROID_NATIVE_CAMERA)
+# [/IGE]
+

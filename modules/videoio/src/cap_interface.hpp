@@ -208,6 +208,10 @@ Ptr<IVideoCapture> createXINECapture(const std::string &filename);
 
 Ptr<IVideoCapture> createAndroidCapture_file(const std::string &filename);
 
+// [IGE]: Add Android native camera capture
+Ptr<IVideoCapture> createAndroidCapture_cam( int index );
+// [.IGE]
+
 } // cv::
 
 #endif // CAP_INTERFACE_HPP

@@ -1,3 +1,11 @@
+# [IGE]: detect if Python header included
+if(DEFINED PYTHON_INCLUDE_DIRS)
+  set(PYTHONLIBS_FOUND TRUE)
+  set(OPENCV_SKIP_PYTHON_LOADER TRUE)
+  return()
+endif()
+# [/IGE]
+
 ocv_assert(NOT OPENCV_SKIP_PYTHON_LOADER)
 
 set(PYTHON_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}")

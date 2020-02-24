@@ -14,6 +14,11 @@ FATAL: In-source builds are not allowed.
 ")
 endif()
 
+# [IGE]: disable ARC on APPLE platform
+if (APPLE)
+  add_compile_options(-fno-objc-arc)
+endif()
+# [/IGE]
 
 include(cmake/OpenCVMinDepVersions.cmake)
 
@@ -120,7 +125,9 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)  # https://cmake.org/cmake/help/
   endif()
 endif()
 
-enable_testing()
+# [IGE]: Disable TEST modules (no need for production)
+# enable_testing()
+# [/IGE]
 
 project(OpenCV CXX C)
 
@@ -417,6 +424,12 @@ OCV_OPTION(WITH_ANDROID_MEDIANDK "Use Android Media NDK for Video I/O (Android)"
   VISIBLE_IF ANDROID
   VERIFY HAVE_ANDROID_MEDIANDK)
 
+# [IGE]: Add Android native camera support
+OCV_OPTION(WITH_ANDROID_NATIVE_CAMERA "Use Android Camera2 API (Android)" (ANDROID_NATIVE_API_LEVEL GREATER 20)
+  VISIBLE_IF ANDROID
+  VERIFY HAVE_ANDROID_NATIVE_CAMERA)
+# [/IGE]
+
 # OpenCV build components
 # ===================================================
 OCV_OPTION(BUILD_SHARED_LIBS        "Build shared libraries (.dll/.so) instead of static ones (.lib/.a)" NOT (ANDROID OR APPLE_FRAMEWORK) )
@@ -515,9 +528,11 @@ else()
 endif()
 
 if(ANDROID)
-  if(ANDROID_ABI MATCHES "NEON")
+  # [IGE]: ensure NEON is enabled on ARM platforms
+  if((ANDROID_ABI MATCHES "NEON") OR (ANDROID_ABI STREQUAL "armeabi-v7a") OR (ANDROID_ABI STREQUAL "arm64-v8a"))
     set(ENABLE_NEON ON)
   endif()
+  # [/IGE]
   if(ANDROID_ABI MATCHES "VFPV3")
     set(ENABLE_VFPV3 ON)
   endif()
@@ -1345,6 +1360,16 @@ endif()
 if(WITH_GPHOTO2 OR HAVE_GPHOTO2)
   status("    gPhoto2:"        HAVE_GPHOTO2        THEN "YES"                                 ELSE NO)
 endif()
+
+# [IGE]: show if Android has native media features
+if(WITH_ANDROID_MEDIANDK OR HAVE_ANDROID_MEDIANDK) 
+  status("    Android Media NDK:"        HAVE_ANDROID_MEDIANDK        THEN "YES"              ELSE NO)
+endif()
+
+if(WITH_ANDROID_NATIVE_CAMERA OR HAVE_ANDROID_NATIVE_CAMERA) 
+  status("    Android Native Camera:"        HAVE_ANDROID_NATIVE_CAMERA        THEN "YES"              ELSE NO)
+endif()
+# [/IGE]
 
 # Order is similar to CV_PARALLEL_FRAMEWORK in core/src/parallel.cpp
 ocv_build_features_string(parallel_status EXCLUSIVE

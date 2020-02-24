@@ -185,6 +185,14 @@ if(TARGET ocv.3rdparty.android_mediandk)
   list(APPEND tgts ocv.3rdparty.android_mediandk)
 endif()
 
+# [IGE]: Add Android native Camera
+if(TARGET ocv.3rdparty.android_native_camera)
+  list(APPEND videoio_srcs
+    ${CMAKE_CURRENT_LIST_DIR}/src/cap_android_camera.cpp)
+  list(APPEND tgts ocv.3rdparty.android_native_camera)
+endif()
+# [/IGE]
+
 ocv_set_module_sources(HEADERS ${videoio_ext_hdrs} ${videoio_hdrs} SOURCES ${videoio_srcs})
 ocv_module_include_directories()
 ocv_create_module()
