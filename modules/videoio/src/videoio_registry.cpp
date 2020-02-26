@@ -138,7 +138,7 @@ static const struct VideoBackendInfo builtin_backends[] =
 
 // [IGE]: Add native camera support
 #ifdef HAVE_ANDROID_NATIVE_CAMERA
-    DECLARE_STATIC_BACKEND(CAP_ANDROID, "ANDROID_NATIVE_CAMERA", MODE_CAPTURE_BY_INDEX, createAndroidCapture_cam, 0, 0),
+    DECLARE_STATIC_BACKEND(CAP_ANDROID_CAM, "ANDROID_NATIVE_CAMERA", MODE_CAPTURE_BY_INDEX, 0, createAndroidCapture_cam, 0),
 #endif
 // [/IGE]
 

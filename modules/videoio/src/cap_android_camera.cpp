@@ -309,7 +309,7 @@ public:
 
     bool isOpened() const CV_OVERRIDE { return true; }
 
-    int getCaptureDomain() CV_OVERRIDE { return CAP_ANDROID; }
+    int getCaptureDomain() CV_OVERRIDE { return CAP_ANDROID_CAM; }
 
     bool retrieveFrame(int, OutputArray out) CV_OVERRIDE
     {
