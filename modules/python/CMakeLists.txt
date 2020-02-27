@@ -2,6 +2,59 @@
 #  CMake file for python support
 # ----------------------------------------------------------------------------
 if(DEFINED OPENCV_INITIAL_PASS)  # OpenCV build
+# [IGE]: always build satic python binding
+    if (NOT BUILD_SHARED_LIBS AND DEFINED NUMPY_INCLUDE_DIRS)
+        set (PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/Include")
+        set (NUMPY_INCLUDE_DIRS 
+                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include"
+                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy"
+                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy/core"
+                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy/core/include"
+                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy/core/include/numpy"
+                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy/core/include/numpy/random"
+            )
+        if (MSVC)
+            list(APPEND PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/PC")
+        elseif (OSX)
+            list(APPEND PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/Mac")
+        elseif (ANDROID)
+            list(APPEND PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/Android")
+        elseif (IOS)
+            list(APPEND PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/IOS")
+        endif ()
+        
+        set(cv2_src src2/cv2.cpp)
+        
+        add_library(cv2_python STATIC ${cv2_src})
+        
+        target_include_directories(cv2_python PRIVATE
+            ${CMAKE_BINARY_DIR}
+            ${PYTHON_INCLUDE_DIRS}
+            ${NUMPY_INCLUDE_DIRS}       
+            ${CMAKE_CURRENT_SOURCE_DIR}/../../include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../python_bindings_generator
+            ${CMAKE_CURRENT_SOURCE_DIR}/../core/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../flann/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../imgproc/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../ml/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../photo/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../dnn/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../features2d/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../imgcodecs/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../videoio/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../calib3d/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../highgui/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../objdetect/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../stitching/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/../video/include
+        )
+        
+        target_link_libraries(cv2_python opencv_calib3d opencv_core opencv_dnn opencv_features2d
+                        opencv_flann opencv_highgui opencv_imgcodecs opencv_imgproc
+                        opencv_ml opencv_objdetect opencv_photo opencv_stitching
+                        opencv_video opencv_videoio)
+    endif()
+# [/IGE]
 
 if(ANDROID OR APPLE_FRAMEWORK OR WINRT)
   ocv_module_disable_(python2)

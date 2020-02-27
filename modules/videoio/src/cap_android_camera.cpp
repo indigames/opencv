@@ -9,25 +9,9 @@
 #include <mutex>
 #include <thread>
 #include <chrono>
-#include <android/log.h>
 #include <jni.h>
 
 using namespace cv;
-
-#ifdef DEBUG
-    #define TAG "AndroidCameraCapture"
-    #define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, TAG, __VA_ARGS__)
-    #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
-    #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, TAG, __VA_ARGS__)
-    #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, TAG, __VA_ARGS__)
-    #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
-#else
-    #define LOGV(...)
-    #define LOGI(...)
-    #define LOGW(...)
-    #define LOGD(...)
-    #define LOGE(...)
-#endif
 
 #define COLOR_FormatYUV420Planar 19
 #define COLOR_FormatYUV420SemiPlanar 21
@@ -110,11 +94,8 @@ bool AndroidCameraCapture_setJavaVM(JavaVM* vm) {
     return true;
 }
 
-bool InitCameraJNI(int idx, int width, int height)
-{
-    if (!jVM)
-    {
-        LOGE("ERROR: g_JavaVM is unavailable");
+bool InitCameraJNI(int idx, int width, int height) {
+    if (!jVM) {
         return false;
     }
 
@@ -127,8 +108,7 @@ bool InitCameraJNI(int idx, int width, int height)
     return true;
 }
 
-class AndroidCameraCapture : public IVideoCapture
-{
+class AndroidCameraCapture : public IVideoCapture {
 private:
     int32_t index;
     int32_t frameWidth;
@@ -142,31 +122,23 @@ public:
     AndroidCameraCapture(): index(0), frameWidth(640), frameHeight(480), colorFormat(0), _isOpened(false) {}
     ~AndroidCameraCapture() { cleanUp(); }
 
-    bool initCapture(int idx)
-    {
-        LOGI("initCapture: %d", idx);
+    bool initCapture(int idx) {
         index = idx;
         return true;
     }
 
-    void cleanUp()
-    {
-        if(_isOpened)
-        {
+    void cleanUp() {
+        if(_isOpened) {
             _isOpened = false;
         }
     }
 
-    bool grabFrame() CV_OVERRIDE
-    {
-        if(!jVM || frameWidth < 0 || frameHeight < 0)
-        {
-            LOGE("ERROR: g_JavaVM is unavailable");
+    bool grabFrame() CV_OVERRIDE {
+        if(!jVM || frameWidth < 0 || frameHeight < 0) {
             return false;
         }
 
-        if(!_isOpened)
-        {
+        if(!_isOpened) {
             InitCameraJNI(index, frameWidth, frameHeight);
             _isOpened = true;
             return false;
@@ -179,28 +151,15 @@ public:
         JNIEnv *env = sc.env;
 
         jobject sInstance = env->GetStaticObjectField(g_clsActivity, fid_sInstance);
-        LOGD("GetCameraFrameFromJNI sInstance = %d", sInstance);
-
         jobject imageReader = env->GetObjectField(sInstance, fid_imageReader);
-        LOGD("GetCameraFrameFromJNI imageReader = %d", imageReader);
-
-        if(imageReader)
-        {
+        
+        if(imageReader) {
             jobject image = env->CallObjectMethod(imageReader, mid_acquireLatestImage);
-            LOGD("GetCameraFrameFromJNI image = %d", image);
-
-            if(image)
-            {
+            if(image) {
                 int format = env->CallIntMethod(image, mid_getFormat);
-                LOGD("GetCameraFrameFromJNI image format = %d", format);
-
-                if(format != IMAGE_FORMAT_YUV_420_888)
-                {
-                    LOGE("Image format not supported: %d", format);
-
+                if(format != IMAGE_FORMAT_YUV_420_888) {
                     env->CallVoidMethod(image, mid_close);
-                    LOGD("GetCameraFrameFromJNI image closed");
-
+                    
                     env->DeleteLocalRef(image);
                     env->DeleteLocalRef(imageReader);
                     env->DeleteLocalRef(sInstance);
@@ -208,14 +167,9 @@ public:
                 }
 
                 jobjectArray planes = reinterpret_cast<jobjectArray>(env->CallObjectMethod(image, mid_getPlanes));
-                LOGD("Image planes: %d", planes);
-
                 if(planes) {
                     int len = env->GetArrayLength(planes);
-                    LOGD("Image planes len: %d", len);
-
-                    if (len == 3)
-                    {
+                    if (len == 3) {
                         jobject plan_0 = env->GetObjectArrayElement(planes, 0);
                         jobject plan_1 = env->GetObjectArrayElement(planes, 1);
                         jobject plan_2 = env->GetObjectArrayElement(planes, 2);
@@ -224,8 +178,8 @@ public:
                         jobject mem_buff_1 = env->CallObjectMethod(plan_1, mid_getBuffer);
                         jobject mem_buff_2 = env->CallObjectMethod(plan_2, mid_getBuffer);
 
-                       // int32_t yStride = env->CallIntMethod(plan_0, mid_getRowStride);
-                       // int32_t uvStride = env->CallIntMethod(plan_1, mid_getRowStride);
+                        // int32_t yStride = env->CallIntMethod(plan_0, mid_getRowStride);
+                        // int32_t uvStride = env->CallIntMethod(plan_1, mid_getRowStride);
 
                         uint8_t *yPixel = (uint8_t *)env->GetDirectBufferAddress(mem_buff_0);
                         uint8_t *vPixel = (uint8_t *)env->GetDirectBufferAddress(mem_buff_1);
@@ -242,10 +196,7 @@ public:
                             colorFormat = COLOR_FormatYUV420Planar;
                         } else {
                             colorFormat = COLOR_FormatUnknown;
-                            LOGE("Unsupported format");
-
                             env->CallVoidMethod(image, mid_close);
-                            LOGD("GetCameraFrameFromJNI image closed");
 
                             env->DeleteLocalRef(plan_0);
                             env->DeleteLocalRef(plan_1);
@@ -274,11 +225,8 @@ public:
                         env->DeleteLocalRef(mem_buff_1);
                         env->DeleteLocalRef(mem_buff_2);
                     }
-                    else
-                    {
-                        LOGE("Incorrect number of planes in image data");
+                    else {
                         env->CallVoidMethod(image, mid_close);
-                        LOGD("GetCameraFrameFromJNI image closed");
 
                         env->DeleteLocalRef(planes);
                         env->DeleteLocalRef(image);
@@ -292,7 +240,6 @@ public:
                 }
 
                 env->CallVoidMethod(image, mid_close);
-                LOGD("GetCameraFrameFromJNI image closed");
 
                 env->DeleteLocalRef(image);
             }
@@ -302,8 +249,6 @@ public:
         }
         // Free the local ref
         env->DeleteLocalRef(sInstance);
-
-        LOGD("GetCameraFrameFromJNI Done");
         return true;
     }
 
@@ -311,22 +256,18 @@ public:
 
     int getCaptureDomain() CV_OVERRIDE { return CAP_ANDROID_CAM; }
 
-    bool retrieveFrame(int, OutputArray out) CV_OVERRIDE
-    {
-        if (buffer.empty()) return false;
-
+    bool retrieveFrame(int, OutputArray out) CV_OVERRIDE {
+        if (buffer.empty()) {
+            return false;
+        }
         Mat yuv(frameHeight + frameHeight/2, frameWidth, CV_8UC1, buffer.data());
-        if (colorFormat == COLOR_FormatYUV420Planar)
-        {
+        if (colorFormat == COLOR_FormatYUV420Planar) {
             cv::cvtColor(yuv, out, cv::COLOR_YUV2BGR_YV12);
         }
-        else if (colorFormat == COLOR_FormatYUV420SemiPlanar)
-        {
+        else if (colorFormat == COLOR_FormatYUV420SemiPlanar) {
             cv::cvtColor(yuv, out, cv::COLOR_YUV2BGR_NV21);
         }
-        else
-        {
-            LOGE("Unsupported video format: %d", colorFormat);
+        else {
             return false;
         }
 
@@ -335,20 +276,16 @@ public:
         return true;
     }
 
-    double getProperty(int property_id) const CV_OVERRIDE
-    {
-        switch (property_id)
-        {
+    double getProperty(int property_id) const CV_OVERRIDE {
+        switch (property_id) {
             case CV_CAP_PROP_FRAME_WIDTH: return frameWidth;
             case CV_CAP_PROP_FRAME_HEIGHT: return frameHeight;
         }
         return 0;
     }
 
-    bool setProperty(int  property_id, double value) CV_OVERRIDE
-    {
-        switch (property_id)
-        {
+    bool setProperty(int  property_id, double value) CV_OVERRIDE {
+        switch (property_id) {
             case CV_CAP_PROP_FRAME_WIDTH:
                 frameWidth = (int32_t)value;
                 break;

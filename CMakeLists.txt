@@ -6,6 +6,33 @@
 #
 # ----------------------------------------------------------------------------
 
+# [IGE]: tweaks for platforms
+set (CMAKE_CXX_STANDARD 17)
+
+if(DEFINED ANDROID_PLATFORM)
+    set (ANDROID 1)
+    add_compile_options(
+        "$<$<CONFIG:DEBUG>:-Og>"
+        "$<$<CONFIG:RELEASE>:-Ofast>"
+    )    
+    if(ANDROID_ABI STREQUAL "armeabi-v7a")
+        add_compile_options(-marm -march=armv7-a -mtune=cortex-a15 -mfpu=neon-fp16 -mfloat-abi=softfp)
+    elseif(ANDROID_ABI STREQUAL "x86")
+        add_compile_options(-march=atom -m32 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -mstackrealign)
+    elseif(ANDROID_ABI STREQUAL "arm64-v8a")
+        add_compile_options(-march=armv8-a+simd+sve -mtune=cortex-a53 -D__ARM_NEON -D__ARM_NEON__)
+    elseif(ANDROID_ABI STREQUAL "x86_64")
+        add_compile_options(-march=atom -m64 -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -mfpmath=sse)
+    endif()
+elseif(MSVC)
+    add_compile_options(/MP)
+    add_compile_options(
+        "$<$<CONFIG:DEBUG>:/Og>"
+        "$<$<CONFIG:RELEASE>:/O2>"
+    )
+endif()
+# [/IGE]
+
 # Disable in-source builds to prevent source tree corruption.
 if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
   message(FATAL_ERROR "
@@ -432,16 +459,16 @@ OCV_OPTION(WITH_ANDROID_NATIVE_CAMERA "Use Android Camera2 API (Android)" (ANDRO
 
 # OpenCV build components
 # ===================================================
-OCV_OPTION(BUILD_SHARED_LIBS        "Build shared libraries (.dll/.so) instead of static ones (.lib/.a)" NOT (ANDROID OR APPLE_FRAMEWORK) )
-OCV_OPTION(BUILD_opencv_apps        "Build utility applications (used for example to train classifiers)" (NOT ANDROID AND NOT WINRT) IF (NOT APPLE_FRAMEWORK) )
+OCV_OPTION(BUILD_SHARED_LIBS        "Build shared libraries (.dll/.so) instead of static ones (.lib/.a)" OFF ) # [IGE]: Default (NOT (ANDROID OR APPLE_FRAMEWORK))
+OCV_OPTION(BUILD_opencv_apps        "Build utility applications (used for example to train classifiers)" OFF ) # [IGE]: Default ((NOT ANDROID AND NOT WINRT) IF (NOT APPLE_FRAMEWORK))
 OCV_OPTION(BUILD_opencv_js          "Build JavaScript bindings by Emscripten" OFF )
-OCV_OPTION(BUILD_ANDROID_PROJECTS   "Build Android projects providing .apk files" ON  IF ANDROID )
-OCV_OPTION(BUILD_ANDROID_EXAMPLES   "Build examples for Android platform"         ON  IF ANDROID )
+OCV_OPTION(BUILD_ANDROID_PROJECTS   "Build Android projects providing .apk files" OFF ) # [IGE]: Default (ON  IF ANDROID)
+OCV_OPTION(BUILD_ANDROID_EXAMPLES   "Build examples for Android platform"         OFF ) # [IGE]: Default (ON  IF ANDROID)
 OCV_OPTION(BUILD_DOCS               "Create build rules for OpenCV Documentation" OFF  IF (NOT WINRT AND NOT APPLE_FRAMEWORK))
 OCV_OPTION(BUILD_EXAMPLES           "Build all examples"                          OFF )
-OCV_OPTION(BUILD_PACKAGE            "Enables 'make package_source' command"       ON  IF NOT WINRT)
-OCV_OPTION(BUILD_PERF_TESTS         "Build performance tests"                     NOT INSTALL_CREATE_DISTRIB  IF (NOT APPLE_FRAMEWORK) )
-OCV_OPTION(BUILD_TESTS              "Build accuracy & regression tests"           NOT INSTALL_CREATE_DISTRIB  IF (NOT APPLE_FRAMEWORK) )
+OCV_OPTION(BUILD_PACKAGE            "Enables 'make package_source' command"       OFF ) # [IGE]: Default (ON  IF NOT WINRT)
+OCV_OPTION(BUILD_PERF_TESTS         "Build performance tests"                     OFF ) # [IGE]: Default (NOT INSTALL_CREATE_DISTRIB  IF (NOT APPLE_FRAMEWORK))
+OCV_OPTION(BUILD_TESTS              "Build accuracy & regression tests"           OFF ) # [IGE]: Default (NOT INSTALL_CREATE_DISTRIB  IF (NOT APPLE_FRAMEWORK))
 OCV_OPTION(BUILD_WITH_DEBUG_INFO    "Include debug info into release binaries ('OFF' means default settings)" OFF )
 OCV_OPTION(BUILD_WITH_STATIC_CRT    "Enables use of statically linked CRT for statically linked OpenCV" ON IF MSVC )
 OCV_OPTION(BUILD_WITH_DYNAMIC_IPP   "Enables dynamic linking of IPP (only for standalone IPP)" OFF )
@@ -1079,6 +1106,11 @@ status("    3rdparty dependencies:" ${deps_3rdparty})
 status("")
 status("  OpenCV modules:")
 set(OPENCV_MODULES_BUILD_ST "")
+
+# [IGE]: force build python so that it compile python binding project
+list(APPEND OPENCV_MODULES_BUILD "python3")
+# [/IGE]
+
 foreach(the_module ${OPENCV_MODULES_BUILD})
   if(NOT OPENCV_MODULE_${the_module}_CLASS STREQUAL "INTERNAL" OR the_module STREQUAL "opencv_ts")
     list(APPEND OPENCV_MODULES_BUILD_ST "${the_module}")
