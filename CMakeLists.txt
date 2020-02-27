@@ -7,29 +7,19 @@
 # ----------------------------------------------------------------------------
 
 # [IGE]: tweaks for platforms
-set (CMAKE_CXX_STANDARD 17)
-
 if(DEFINED ANDROID_PLATFORM)
     set (ANDROID 1)
-    add_compile_options(
-        "$<$<CONFIG:DEBUG>:-Og>"
-        "$<$<CONFIG:RELEASE>:-Ofast>"
-    )    
     if(ANDROID_ABI STREQUAL "armeabi-v7a")
         add_compile_options(-marm -march=armv7-a -mtune=cortex-a15 -mfpu=neon-fp16 -mfloat-abi=softfp)
     elseif(ANDROID_ABI STREQUAL "x86")
         add_compile_options(-march=atom -m32 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -mstackrealign)
     elseif(ANDROID_ABI STREQUAL "arm64-v8a")
         add_compile_options(-march=armv8-a+simd+sve -mtune=cortex-a53 -D__ARM_NEON -D__ARM_NEON__)
+        add_compile_options(-Oz)
     elseif(ANDROID_ABI STREQUAL "x86_64")
         add_compile_options(-march=atom -m64 -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -mfpmath=sse)
+        add_compile_options(-Oz)
     endif()
-elseif(MSVC)
-    add_compile_options(/MP)
-    add_compile_options(
-        "$<$<CONFIG:DEBUG>:/Og>"
-        "$<$<CONFIG:RELEASE>:/O2>"
-    )
 endif()
 # [/IGE]
 
@@ -1394,11 +1384,11 @@ if(WITH_GPHOTO2 OR HAVE_GPHOTO2)
 endif()
 
 # [IGE]: show if Android has native media features
-if(WITH_ANDROID_MEDIANDK OR HAVE_ANDROID_MEDIANDK) 
+if(WITH_ANDROID_MEDIANDK OR HAVE_ANDROID_MEDIANDK)
   status("    Android Media NDK:"        HAVE_ANDROID_MEDIANDK        THEN "YES"              ELSE NO)
 endif()
 
-if(WITH_ANDROID_NATIVE_CAMERA OR HAVE_ANDROID_NATIVE_CAMERA) 
+if(WITH_ANDROID_NATIVE_CAMERA OR HAVE_ANDROID_NATIVE_CAMERA)
   status("    Android Native Camera:"        HAVE_ANDROID_NATIVE_CAMERA        THEN "YES"              ELSE NO)
 endif()
 # [/IGE]
