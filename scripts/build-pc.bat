@@ -2,7 +2,8 @@
 
 SET LIB_NAME=OpenCV
 
-SET BUILD_DEBUG=0
+SET BUILD_DEBUG=%BUILD_DEBUG%
+SET BUILD_X86=%BUILD_X86%
 
 echo COMPILING PC...
 SET PROJECT_DIR=%~dp0..
@@ -44,7 +45,8 @@ echo Fetching include headers...
     xcopy /q /s /y %~dp0..\modules\*.h?? %OUTPUT_HEADER%\modules\
 
 cd %PROJECT_DIR%
-echo Compiling x86...
+if [%BUILD_X86%]==[1] (
+    echo Compiling x86...
     if not exist %BUILD_DIR%\x86 (
         mkdir %BUILD_DIR%\x86
     )
@@ -69,7 +71,8 @@ echo Compiling x86...
 
     echo Fetching latest generated header for python binding...
     xcopy /q /s /y %BUILD_DIR%\x86\modules\python_bindings_generator\*.h %PROJECT_DIR%\modules\python_bindings_generator\    
-echo Compiling x86 DONE
+    echo Compiling x86 DONE
+)
 
 cd %PROJECT_DIR%
 echo Compiling x64...
@@ -99,8 +102,8 @@ echo Compiling x64 DONE
 goto ALL_DONE
 
 :ERROR
-	echo ERROR OCCURED DURING COMPILING!
+    echo ERROR OCCURED DURING COMPILING!
 
 :ALL_DONE
-	cd %PROJECT_DIR%
-	echo COMPILING DONE!
+    cd %PROJECT_DIR%
+    echo COMPILING DONE!

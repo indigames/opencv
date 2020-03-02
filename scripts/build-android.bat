@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 SET LIB_NAME=OpenCV
 
-SET BUILD_DEBUG=0
+SET BUILD_DEBUG=%BUILD_DEBUG%
 
 echo COMPILING PC...
 SET PROJECT_DIR=%~dp0..
@@ -86,7 +86,7 @@ echo Compiling armeabi-v7a...
         xcopy /q /y lib\armeabi-v7a\*.a %OUTPUT_LIBS_DEBUG%\armeabi-v7a\
         xcopy /q /y lib\armeabi-v7a\*.so %OUTPUT_LIBS_DEBUG%\armeabi-v7a\
     )
-    
+
     if not exist %BUILD_DIR%\armeabi-v7a\Release (
         mkdir %BUILD_DIR%\armeabi-v7a\Release
     )
@@ -118,7 +118,7 @@ echo Compiling arm64-v8a...
         xcopy /q /y lib\arm64-v8a\*.a %OUTPUT_LIBS_DEBUG%\arm64-v8a\
         xcopy /q /y lib\arm64-v8a\*.so %OUTPUT_LIBS_DEBUG%\arm64-v8a\
     )
-    
+
     if not exist %BUILD_DIR%\arm64-v8a\Release (
         mkdir %BUILD_DIR%\arm64-v8a\Release
     )
@@ -150,7 +150,7 @@ echo Compiling x86...
         xcopy /q /y lib\x86\*.a %OUTPUT_LIBS_DEBUG%\x86\
         xcopy /q /y lib\x86\*.so %OUTPUT_LIBS_DEBUG%\x86\
     )
-    
+
     if not exist %BUILD_DIR%\x86\Release (
         mkdir %BUILD_DIR%\x86\Release
     )
@@ -182,7 +182,7 @@ echo Compiling x86_64...
         xcopy /q /y lib\x86_64\*.a %OUTPUT_LIBS_DEBUG%\x86_64\
         xcopy /q /y lib\x86_64\*.so %OUTPUT_LIBS_DEBUG%\x86_64\
     )
-    
+
     if not exist %BUILD_DIR%\x86_64\Release (
         mkdir %BUILD_DIR%\x86_64\Release
     )
@@ -200,8 +200,8 @@ echo Compiling x86_64 DONE
 goto ALL_DONE
 
 :ERROR
-	echo ERROR OCCURED DURING COMPILING
+    echo ERROR OCCURED DURING COMPILING
 
 :ALL_DONE
-	cd %PROJECT_DIR%
-	echo COMPILING DONE!
+    cd %PROJECT_DIR%
+    echo COMPILING DONE!
