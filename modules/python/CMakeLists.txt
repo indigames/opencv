@@ -2,8 +2,8 @@
 #  CMake file for python support
 # ----------------------------------------------------------------------------
 if(DEFINED OPENCV_INITIAL_PASS)  # OpenCV build
-# [IGE]: always build satic python binding
-    if (NOT BUILD_SHARED_LIBS AND DEFINED NUMPY_INCLUDE_DIRS)
+# [IGE]: always build static python binding
+    if (NOT BUILD_SHARED_LIBS)
         set (PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/Include")
         set (NUMPY_INCLUDE_DIRS 
                 "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include"

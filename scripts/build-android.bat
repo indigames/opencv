@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 SET LIB_NAME=OpenCV
 
-SET BUILD_DEBUG=%BUILD_DEBUG%
+SET BUILD_DEBUG=1
 
 echo COMPILING PC...
 SET PROJECT_DIR=%~dp0..

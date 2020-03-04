@@ -2,7 +2,7 @@
 
 SET LIB_NAME=OpenCV
 
-SET BUILD_DEBUG=%BUILD_DEBUG%
+SET BUILD_DEBUG=1
 SET BUILD_X86=%BUILD_X86%
 
 echo COMPILING PC...
@@ -71,6 +71,7 @@ if [%BUILD_X86%]==[1] (
         if %ERRORLEVEL% NEQ 0 goto ERROR
         xcopy /q /s /y lib\Debug\*.lib %OUTPUT_LIBS_DEBUG%\x86\
         xcopy /q /s /y bin\Debug\*.dll %OUTPUT_LIBS_DEBUG%\x86\
+        xcopy /q /s /y lib\python3\Debug\*.pyd %OUTPUT_LIBS_DEBUG%\x86\
     )
 
     echo Compiling x86 - Release...
@@ -78,6 +79,7 @@ if [%BUILD_X86%]==[1] (
     if %ERRORLEVEL% NEQ 0 goto ERROR
     xcopy /q /s /y lib\Release\*.lib %OUTPUT_LIBS_RELEASE%\x86\
     xcopy /q /s /y bin\Release\*.dll %OUTPUT_LIBS_RELEASE%\x86\
+    xcopy /q /s /y lib\python3\Release\*.pyd %OUTPUT_LIBS_RELEASE%\x86\
 
     echo Fetching latest generated header for python binding...
     xcopy /q /s /y %BUILD_DIR%\x86\modules\python_bindings_generator\*.h %PROJECT_DIR%\modules\python_bindings_generator\    
@@ -100,6 +102,7 @@ echo Compiling x64...
         if %ERRORLEVEL% NEQ 0 goto ERROR
         xcopy /q /s /y lib\Debug\*.lib %OUTPUT_LIBS_DEBUG%\x64\
         xcopy /q /s /y bin\Debug\*.dll %OUTPUT_LIBS_DEBUG%\x64\
+        xcopy /q /s /y lib\python3\Debug\*.pyd %OUTPUT_LIBS_DEBUG%\x64\
     )
 
     echo Compiling x64 - Release...
@@ -107,6 +110,7 @@ echo Compiling x64...
     if %ERRORLEVEL% NEQ 0 goto ERROR
     xcopy /q /s /y lib\Release\*.lib %OUTPUT_LIBS_RELEASE%\x64\
     xcopy /q /s /y bin\Release\*.dll %OUTPUT_LIBS_RELEASE%\x64\
+    xcopy /q /s /y lib\python3\Release\*.pyd %OUTPUT_LIBS_RELEASE%\x64\
 echo Compiling x64 DONE
 
 goto ALL_DONE
