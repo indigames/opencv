@@ -13,6 +13,16 @@ SET OUTPUT_DIR=%PROJECT_DIR%\igeLibs\%LIB_NAME%
 SET OUTPUT_LIBS_DEBUG=%OUTPUT_DIR%\libs\Debug\android
 SET OUTPUT_LIBS_RELEASE=%OUTPUT_DIR%\libs\Release\android
 
+rem Clone igeLibs, then set environment variable *IGE_LIBS* point to the cloned directory
+if not exist "%PROJECT_DIR%\igeLibs" (
+    mklink /J "%PROJECT_DIR%\igeLibs" "%IGE_LIBS%"
+)
+
+if not exist "%PROJECT_DIR%\igeLibs" (
+    echo IGE_LIBS was not set, please clone igeLibs and set IGE_LIBS to the cloned path!
+    goto ERROR
+)
+
 if not exist "%ANDROID_SDK_ROOT%" (
     if exist "%ANDROID_HOME%" (
         set ANDROID_SDK_ROOT=%ANDROID_HOME%
