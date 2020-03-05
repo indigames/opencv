@@ -71,7 +71,7 @@ if [%BUILD_X86%]==[1] (
         if %ERRORLEVEL% NEQ 0 goto ERROR
         xcopy /q /s /y lib\Debug\*.lib %OUTPUT_LIBS_DEBUG%\x86\
         xcopy /q /s /y bin\Debug\*.dll %OUTPUT_LIBS_DEBUG%\x86\
-        xcopy /q /s /y lib\python3\Debug\*.pyd %OUTPUT_LIBS_DEBUG%\x86\
+        REM xcopy /q /s /y lib\python3\Debug\*.pyd %OUTPUT_LIBS_DEBUG%\x86\
         xcopy /q /s /y 3rdparty\lib\Debug\*.lib %OUTPUT_LIBS_DEBUG%\x86\
     )
 
@@ -80,7 +80,7 @@ if [%BUILD_X86%]==[1] (
     if %ERRORLEVEL% NEQ 0 goto ERROR
     xcopy /q /s /y lib\Release\*.lib %OUTPUT_LIBS_RELEASE%\x86\
     xcopy /q /s /y bin\Release\*.dll %OUTPUT_LIBS_RELEASE%\x86\
-    xcopy /q /s /y lib\python3\Release\*.pyd %OUTPUT_LIBS_RELEASE%\x86\
+    REM xcopy /q /s /y lib\python3\Release\*.pyd %OUTPUT_LIBS_RELEASE%\x86\
     xcopy /q /s /y 3rdparty\lib\Release\*.lib %OUTPUT_LIBS_RELEASE%\x86\
 
     echo Fetching latest generated header for python binding...
@@ -104,7 +104,7 @@ echo Compiling x64...
         if %ERRORLEVEL% NEQ 0 goto ERROR
         xcopy /q /s /y lib\Debug\*.lib %OUTPUT_LIBS_DEBUG%\x64\
         xcopy /q /s /y bin\Debug\*.dll %OUTPUT_LIBS_DEBUG%\x64\
-        xcopy /q /s /y lib\python3\Debug\*.pyd %OUTPUT_LIBS_DEBUG%\x64\
+        REM xcopy /q /s /y lib\python3\Debug\*.pyd %OUTPUT_LIBS_DEBUG%\x64\
         xcopy /q /s /y 3rdparty\lib\Debug\*.lib %OUTPUT_LIBS_DEBUG%\x64\
     )
 
@@ -113,7 +113,7 @@ echo Compiling x64...
     if %ERRORLEVEL% NEQ 0 goto ERROR
     xcopy /q /s /y lib\Release\*.lib %OUTPUT_LIBS_RELEASE%\x64\
     xcopy /q /s /y bin\Release\*.dll %OUTPUT_LIBS_RELEASE%\x64\
-    xcopy /q /s /y lib\python3\Release\*.pyd %OUTPUT_LIBS_RELEASE%\x64\
+    REM xcopy /q /s /y lib\python3\Release\*.pyd %OUTPUT_LIBS_RELEASE%\x64\
     xcopy /q /s /y 3rdparty\lib\Release\*.lib %OUTPUT_LIBS_RELEASE%\x64\
 echo Compiling x64 DONE
 
