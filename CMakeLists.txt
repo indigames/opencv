@@ -238,13 +238,18 @@ OCV_OPTION(BUILD_OPENEXR            "Build openexr from source"          (((WIN3
 OCV_OPTION(BUILD_WEBP               "Build WebP from source"             (((WIN32 OR ANDROID OR APPLE) AND NOT WINRT) OR OPENCV_FORCE_3RDPARTY_BUILD) )
 OCV_OPTION(BUILD_TBB                "Download and build TBB from source" (ANDROID OR OPENCV_FORCE_3RDPARTY_BUILD) )
 OCV_OPTION(BUILD_IPP_IW             "Build IPP IW from source"           (NOT MINGW OR OPENCV_FORCE_3RDPARTY_BUILD) IF (X86_64 OR X86) AND NOT WINRT )
-OCV_OPTION(BUILD_ITT                "Build Intel ITT from source"
-    (NOT MINGW OR OPENCV_FORCE_3RDPARTY_BUILD)
-    IF (X86_64 OR X86 OR ARM OR AARCH64 OR PPC64 OR PPC64LE) AND NOT WINRT AND NOT APPLE_FRAMEWORK
-)
+OCV_OPTION(BUILD_ITT                "Build Intel ITT from source" OFF) # [IGE]: always OFF
+
+# [IGE] Disable libjpeg-turbo, it breaks linking process with dlib due to incompatibility
+set(BUILD_JPEG_TURBO_DISABLE true)
+# [/IGE]
 
 # Optional 3rd party components
 # ===================================================
+# [IGE}: turn OFF, this also turn OFF GAPI
+OCV_OPTION(WITH_ADE "Enable ADE framework (required for Graph API module)" OFF) 
+# [/IGE]
+
 OCV_OPTION(WITH_1394 "Include IEEE1394 support" ON
   VISIBLE_IF NOT ANDROID AND NOT IOS AND NOT WINRT
   VERIFY HAVE_DC1394_2)
@@ -259,7 +264,7 @@ OCV_OPTION(WITH_CAROTENE "Use NVidia carotene acceleration library for ARM platf
 OCV_OPTION(WITH_CPUFEATURES "Use cpufeatures Android library" ON
   VISIBLE_IF ANDROID
   VERIFY HAVE_CPUFEATURES)
-OCV_OPTION(WITH_VTK "Include VTK library support (and build opencv_viz module eiher)" ON
+OCV_OPTION(WITH_VTK "Include VTK library support (and build opencv_viz module eiher)" OFF # [IGE]: turn OFF
   VISIBLE_IF NOT ANDROID AND NOT IOS AND NOT WINRT AND NOT CMAKE_CROSSCOMPILING
   VERIFY HAVE_VTK)
 OCV_OPTION(WITH_CUDA "Include NVidia Cuda Runtime support" OFF
@@ -280,10 +285,10 @@ OCV_OPTION(WITH_NVCUVID "Include NVidia Video Decoding library support" OFF  # d
 OCV_OPTION(WITH_EIGEN "Include Eigen2/Eigen3 support" (NOT CV_DISABLE_OPTIMIZATION AND NOT CMAKE_CROSSCOMPILING)
   VISIBLE_IF NOT WINRT
   VERIFY HAVE_EIGEN)
-OCV_OPTION(WITH_FFMPEG "Include FFMPEG support" (NOT ANDROID)
+OCV_OPTION(WITH_FFMPEG "Include FFMPEG support" OFF # [IGE]: turn OFF
   VISIBLE_IF NOT IOS AND NOT WINRT
   VERIFY HAVE_FFMPEG)
-OCV_OPTION(WITH_GSTREAMER "Include Gstreamer support" ON
+OCV_OPTION(WITH_GSTREAMER "Include Gstreamer support" OFF # [IGE]: turn OFF
   VISIBLE_IF NOT ANDROID AND NOT IOS AND NOT WINRT
   VERIFY HAVE_GSTREAMER AND GSTREAMER_VERSION VERSION_GREATER "0.99")
 OCV_OPTION(WITH_GTK "Include GTK support" ON
@@ -292,8 +297,8 @@ OCV_OPTION(WITH_GTK "Include GTK support" ON
 OCV_OPTION(WITH_GTK_2_X "Use GTK version 2" OFF
   VISIBLE_IF UNIX AND NOT APPLE AND NOT ANDROID
   VERIFY HAVE_GTK AND NOT HAVE_GTK3)
-OCV_OPTION(WITH_IPP "Include Intel IPP support" (NOT MINGW AND NOT CV_DISABLE_OPTIMIZATION)
-  VISIBLE_IF (X86_64 OR X86) AND NOT WINRT AND NOT IOS
+OCV_OPTION(WITH_IPP "Include Intel IPP support" OFF # [IGE]: turn OFF
+  VISIBLE_IF (X86_64 OR X86) AND NOT WINRT AND NOT APPLE
   VERIFY HAVE_IPP)
 OCV_OPTION(WITH_HALIDE "Include Halide support" OFF
   VISIBLE_IF TRUE
@@ -421,7 +426,7 @@ OCV_OPTION(WITH_GPHOTO2 "Include gPhoto2 library support" OFF
 OCV_OPTION(WITH_LAPACK "Include Lapack library support" (NOT CV_DISABLE_OPTIMIZATION)
   VISIBLE_IF NOT ANDROID AND NOT IOS
   VERIFY HAVE_LAPACK)
-OCV_OPTION(WITH_ITT "Include Intel ITT support" ON
+OCV_OPTION(WITH_ITT "Include Intel ITT support" OFF # [IGE]; turn OFF
   VISIBLE_IF NOT APPLE_FRAMEWORK
   VERIFY HAVE_ITT)
 OCV_OPTION(WITH_PROTOBUF "Enable libprotobuf" ON
@@ -465,7 +470,7 @@ OCV_OPTION(BUILD_PACKAGE            "Enables 'make package_source' command"     
 OCV_OPTION(BUILD_PERF_TESTS         "Build performance tests"                     OFF ) # [IGE]: Default (NOT INSTALL_CREATE_DISTRIB  IF (NOT APPLE_FRAMEWORK))
 OCV_OPTION(BUILD_TESTS              "Build accuracy & regression tests"           OFF ) # [IGE]: Default (NOT INSTALL_CREATE_DISTRIB  IF (NOT APPLE_FRAMEWORK))
 OCV_OPTION(BUILD_WITH_DEBUG_INFO    "Include debug info into release binaries ('OFF' means default settings)" OFF )
-OCV_OPTION(BUILD_WITH_STATIC_CRT    "Enables use of statically linked CRT for statically linked OpenCV" ON IF MSVC )
+OCV_OPTION(BUILD_WITH_STATIC_CRT    "Enables use of statically linked CRT for statically linked OpenCV" OFF IF MSVC ) # [IGE]: OFF
 OCV_OPTION(BUILD_WITH_DYNAMIC_IPP   "Enables dynamic linking of IPP (only for standalone IPP)" OFF )
 OCV_OPTION(BUILD_FAT_JAVA_LIB       "Create Java wrapper exporting all functions of OpenCV library (requires static build of OpenCV modules)" ANDROID IF NOT BUILD_SHARED_LIBS)
 OCV_OPTION(BUILD_ANDROID_SERVICE    "Build OpenCV Manager for Google Play" OFF IF ANDROID )
@@ -509,7 +514,7 @@ OCV_OPTION(GENERATE_ABI_DESCRIPTOR    "Generate XML file for abi_compliance_chec
 OCV_OPTION(OPENCV_GENERATE_PKGCONFIG  "Generate .pc file for pkg-config build tool (deprecated)" OFF)
 OCV_OPTION(CV_ENABLE_INTRINSICS       "Use intrinsic-based optimized code" ON )
 OCV_OPTION(CV_DISABLE_OPTIMIZATION    "Disable explicit optimized code (dispatched code/intrinsics/loop unrolling/etc)" OFF )
-OCV_OPTION(CV_TRACE                   "Enable OpenCV code trace" ON)
+OCV_OPTION(CV_TRACE                   "Enable OpenCV code trace" OFF) # [IGE]: turn OFF
 OCV_OPTION(OPENCV_GENERATE_SETUPVARS  "Generate setup_vars* scripts" ON IF (NOT ANDROID AND NOT APPLE_FRAMEWORK) )
 OCV_OPTION(ENABLE_CONFIG_VERIFICATION "Fail build if actual configuration doesn't match requested (WITH_XXX != HAVE_XXX)" OFF)
 OCV_OPTION(OPENCV_ENABLE_MEMALIGN     "Enable posix_memalign or memalign usage" ON)

@@ -94,6 +94,7 @@ echo Compiling armeabi-v7a...
         cmake --build .
         if %ERRORLEVEL% NEQ 0 goto ERROR
         xcopy /q /y lib\armeabi-v7a\*.a %OUTPUT_LIBS_DEBUG%\armeabi-v7a\
+        xcopy /q /y 3rdparty\lib\armeabi-v7a\*.a %OUTPUT_LIBS_DEBUG%\armeabi-v7a\
         xcopy /q /y lib\armeabi-v7a\*.so %OUTPUT_LIBS_DEBUG%\armeabi-v7a\
     )
 
@@ -108,6 +109,7 @@ echo Compiling armeabi-v7a...
     cmake --build .
     if %ERRORLEVEL% NEQ 0 goto ERROR
     xcopy /q /y lib\armeabi-v7a\*.a %OUTPUT_LIBS_RELEASE%\armeabi-v7a\
+    xcopy /q /y 3rdparty\lib\armeabi-v7a\*.a %OUTPUT_LIBS_RELEASE%\armeabi-v7a\
     xcopy /q /y lib\armeabi-v7a\*.so %OUTPUT_LIBS_RELEASE%\armeabi-v7a\
 echo Compiling armeabi-v7a DONE
 
@@ -126,6 +128,7 @@ echo Compiling arm64-v8a...
         cmake --build .
         if %ERRORLEVEL% NEQ 0 goto ERROR
         xcopy /q /y lib\arm64-v8a\*.a %OUTPUT_LIBS_DEBUG%\arm64-v8a\
+        xcopy /q /y 3rdparty\lib\arm64-v8a\*.a %OUTPUT_LIBS_DEBUG%\arm64-v8a\
         xcopy /q /y lib\arm64-v8a\*.so %OUTPUT_LIBS_DEBUG%\arm64-v8a\
     )
 
@@ -140,6 +143,7 @@ echo Compiling arm64-v8a...
     cmake --build .
     if %ERRORLEVEL% NEQ 0 goto ERROR
     xcopy /q /y lib\arm64-v8a\*.a %OUTPUT_LIBS_RELEASE%\arm64-v8a\
+    xcopy /q /y 3rdparty\lib\arm64-v8a\*.a %OUTPUT_LIBS_RELEASE%\arm64-v8a\
     xcopy /q /y lib\arm64-v8a\*.so %OUTPUT_LIBS_RELEASE%\arm64-v8a\
 echo Compiling arm64-v8a DONE
 
@@ -158,6 +162,7 @@ echo Compiling x86...
         cmake --build .
         if %ERRORLEVEL% NEQ 0 goto ERROR
         xcopy /q /y lib\x86\*.a %OUTPUT_LIBS_DEBUG%\x86\
+        xcopy /q /y 3rdparty\lib\x86\*.a %OUTPUT_LIBS_DEBUG%\x86\
         xcopy /q /y lib\x86\*.so %OUTPUT_LIBS_DEBUG%\x86\
     )
 
@@ -172,6 +177,7 @@ echo Compiling x86...
     cmake --build .
     if %ERRORLEVEL% NEQ 0 goto ERROR
     xcopy /q /y lib\x86\*.a %OUTPUT_LIBS_RELEASE%\x86\
+    xcopy /q /y 3rdparty\lib\x86\*.a %OUTPUT_LIBS_RELEASE%\x86\
     xcopy /q /y lib\x86\*.so %OUTPUT_LIBS_RELEASE%\x86\
 echo Compiling x86 DONE
 
@@ -190,6 +196,7 @@ echo Compiling x86_64...
         cmake --build .
         if %ERRORLEVEL% NEQ 0 goto ERROR
         xcopy /q /y lib\x86_64\*.a %OUTPUT_LIBS_DEBUG%\x86_64\
+        xcopy /q /y 3rdparty\lib\x86_64\*.a %OUTPUT_LIBS_DEBUG%\x86_64\
         xcopy /q /y lib\x86_64\*.so %OUTPUT_LIBS_DEBUG%\x86_64\
     )
 
@@ -204,6 +211,7 @@ echo Compiling x86_64...
     cmake --build .
     if %ERRORLEVEL% NEQ 0 goto ERROR
     xcopy /q /y lib\x86_64\*.a %OUTPUT_LIBS_RELEASE%\x86_64\
+    xcopy /q /y 3rdparty\lib\x86_64\*.a %OUTPUT_LIBS_RELEASE%\x86_64\
     xcopy /q /y lib\x86_64\*.so %OUTPUT_LIBS_RELEASE%\x86_64\
 echo Compiling x86_64 DONE
 
