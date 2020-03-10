@@ -83,8 +83,6 @@ if [%BUILD_X86%]==[1] (
     REM xcopy /q /s /y lib\python3\Release\*.pyd %OUTPUT_LIBS_RELEASE%\x86\
     xcopy /q /s /y 3rdparty\lib\Release\*.lib %OUTPUT_LIBS_RELEASE%\x86\
 
-    echo Fetching latest generated header for python binding...
-    xcopy /q /s /y %BUILD_DIR%\x86\modules\python_bindings_generator\*.h %PROJECT_DIR%\modules\python_bindings_generator\    
     echo Compiling x86 DONE
 )
 

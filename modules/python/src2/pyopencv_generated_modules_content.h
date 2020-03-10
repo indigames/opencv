@@ -454,6 +454,7 @@ static ConstDef consts_cv[] = {
     {"CALIB_ZERO_DISPARITY", static_cast<long>(cv::CALIB_ZERO_DISPARITY)},
     {"CALIB_ZERO_TANGENT_DIST", static_cast<long>(cv::CALIB_ZERO_TANGENT_DIST)},
     {"CAP_ANDROID", static_cast<long>(cv::CAP_ANDROID)},
+    {"CAP_ANDROID_CAM", static_cast<long>(cv::CAP_ANDROID_CAM)},
     {"CAP_ANY", static_cast<long>(cv::CAP_ANY)},
     {"CAP_ARAVIS", static_cast<long>(cv::CAP_ARAVIS)},
     {"CAP_AVFOUNDATION", static_cast<long>(cv::CAP_AVFOUNDATION)},
