@@ -3,17 +3,18 @@ setlocal enabledelayedexpansion
 
 SET LIB_NAME=OpenCV
 
-SET BUILD_DEBUG=1
+SET BUILD_DEBUG=0
 
-echo COMPILING PC...
+echo COMPILING ...
 SET PROJECT_DIR=%~dp0..
 
 SET BUILD_DIR=%PROJECT_DIR%\build\android
 SET OUTPUT_DIR=%PROJECT_DIR%\igeLibs\%LIB_NAME%
-SET OUTPUT_LIBS_DEBUG=%OUTPUT_DIR%\libs\Debug\android
-SET OUTPUT_LIBS_RELEASE=%OUTPUT_DIR%\libs\Release\android
+SET OUTPUT_LIBS_DEBUG=%OUTPUT_DIR%\libs\android\Debug
+SET OUTPUT_LIBS_RELEASE=%OUTPUT_DIR%\libs\android
 
-rem Clone igeLibs, then set environment variable *IGE_LIBS* point to the cloned directory
+SET CALL_DIR=%CD%
+
 if not exist "%PROJECT_DIR%\igeLibs" (
     mklink /J "%PROJECT_DIR%\igeLibs" "%IGE_LIBS%"
 )
@@ -218,8 +219,8 @@ echo Compiling x86_64 DONE
 goto ALL_DONE
 
 :ERROR
-    echo ERROR OCCURED DURING COMPILING
+    echo ERROR OCCURED DURING COMPILING!
 
 :ALL_DONE
-    cd %PROJECT_DIR%
+    cd %CALL_DIR%
     echo COMPILING DONE!
