@@ -4,23 +4,26 @@
 if(DEFINED OPENCV_INITIAL_PASS)  # OpenCV build
 # [IGE]: always build static python binding
     if (NOT BUILD_SHARED_LIBS)
-        set (PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/Include")
+        if (NOT DEFINED IGE_ROOT)
+          set(IGE_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+        endif()
+        set (PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/Include")
         set (NUMPY_INCLUDE_DIRS 
-                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include"
-                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy"
-                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy/core"
-                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy/core/include"
-                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy/core/include/numpy"
-                "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/numpy/include/numpy/core/include/numpy/random"
+                "${IGE_ROOT}/igeLibs/numpy/include"
+                "${IGE_ROOT}/igeLibs/numpy/include/numpy"
+                "${IGE_ROOT}/igeLibs/numpy/include/numpy/core"
+                "${IGE_ROOT}/igeLibs/numpy/include/numpy/core/include"
+                "${IGE_ROOT}/igeLibs/numpy/include/numpy/core/include/numpy"
+                "${IGE_ROOT}/igeLibs/numpy/include/numpy/core/include/numpy/random"
             )
         if (MSVC)
-            list(APPEND PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/PC")
+            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/PC")
         elseif (OSX)
-            list(APPEND PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/Mac")
+            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/Mac")
         elseif (ANDROID)
-            list(APPEND PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/Android")
+            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/Android")
         elseif (IOS)
-            list(APPEND PYTHON_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../../igeLibs/Python/IOS")
+            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/IOS")
         endif ()
         
         set(cv2_src src2/cv2.cpp)

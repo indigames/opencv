@@ -46,6 +46,8 @@
 #include <string.h>
 #include <map>
 
+#include <functional> // [IGE]
+
 #include "ImfNamespace.h"
 
 OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER 
@@ -63,7 +65,7 @@ Attribute::~Attribute () {}
 
 namespace {
 
-struct NameCompare: std::binary_function <const char *, const char *, bool>
+struct NameCompare: std::function <bool(const char *, const char *)> // [IGE]
 {
     bool
     operator () (const char *x, const char *y) const
