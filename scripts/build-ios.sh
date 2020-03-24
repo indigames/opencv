@@ -38,7 +38,8 @@ if [ $? -ne 0 ]; then
 fi
 
 [ ! -d "$OUTPUT_DIR/arm64" ] && mkdir -p $OUTPUT_DIR/arm64
-cp -R -f -p ./Release-iphoneos/*.a $OUTPUT_DIR/arm64
+cp -R -f -p ./lib/Release/*.a $OUTPUT_DIR/arm64
+cp -R -f -p ./3rdparty/lib/Release/*.a $OUTPUT_DIR/arm64
 cp -R -f -p ./Release-iphoneos/*.so $OUTPUT_DIR/arm64
 
 echo DONE!

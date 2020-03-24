@@ -37,7 +37,8 @@ if [ $? -ne 0 ]; then
 fi
 
 [ ! -d "$OUTPUT_DIR/x64" ] && mkdir -p $OUTPUT_DIR/x64
-cp -R -f -p ./Release/*.a $OUTPUT_DIR/x64
+cp -R -f -p ./lib/Release/*.a $OUTPUT_DIR/x64
+cp -R -f -p ./3rdparty/lib/Release/*.a $OUTPUT_DIR/x64
 cp -R -f -p ./Release/*.so $OUTPUT_DIR/x64
 
 echo DONE!
