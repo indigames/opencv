@@ -14,7 +14,19 @@
 #endif
 
 #include <math.h>
+
+// [IGE]: Avoid linking with python37_d.lib
+#ifdef _DEBUG
+#  define IGE_DEBUG
+#  undef _DEBUG
+#endif
+
 #include <Python.h>
+
+#ifdef IGE_DEBUG
+# define _DEBUG
+#endif
+// [/IGE]
 
 #if PY_MAJOR_VERSION < 3
 #undef CVPY_DYNAMIC_INIT
