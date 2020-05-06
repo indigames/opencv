@@ -9,20 +9,11 @@ echo COMPILING ...
 SET PROJECT_DIR=%~dp0..
 
 SET BUILD_DIR=%PROJECT_DIR%\build\android
-SET OUTPUT_DIR=%PROJECT_DIR%\igeLibs\%LIB_NAME%
+SET OUTPUT_DIR=%IGE_LIBS%\%LIB_NAME%
 SET OUTPUT_LIBS_DEBUG=%OUTPUT_DIR%\libs\android\Debug
 SET OUTPUT_LIBS_RELEASE=%OUTPUT_DIR%\libs\android
 
 SET CALL_DIR=%CD%
-
-if not exist "%PROJECT_DIR%\igeLibs" (
-    mklink /J "%PROJECT_DIR%\igeLibs" "%IGE_LIBS%"
-)
-
-if not exist "%PROJECT_DIR%\igeLibs" (
-    echo IGE_LIBS was not set, please clone igeLibs and set IGE_LIBS to the cloned path!
-    goto ERROR
-)
 
 if not exist "%ANDROID_SDK_ROOT%" (
     if exist "%ANDROID_HOME%" (

@@ -21,11 +21,7 @@ export PATH="$PATH:/usr/local/bin"
 # export IGE_LIBS=$PROJECT_DIR/../igeLibs
 
 export BUILD_DIR=$PROJECT_DIR/build/macos
-export OUTPUT_DIR=$PROJECT_DIR/igeLibs/$LIB_NAME/libs/macos
-echo $IGE_LIBS
-if [ ! -d "$PROJECT_DIR/igeLibs" ]; then
-    ln -s "$IGE_LIBS" "$PROJECT_DIR/igeLibs"
-fi
+export OUTPUT_DIR=$IGE_LIBS/$LIB_NAME/libs/macos
 
 [ ! -d "$BUILD_DIR" ] && mkdir -p $BUILD_DIR
 cd $BUILD_DIR

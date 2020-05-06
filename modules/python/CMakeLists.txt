@@ -4,26 +4,23 @@
 if(DEFINED OPENCV_INITIAL_PASS)  # OpenCV build
 # [IGE]: always build static python binding
     if (NOT BUILD_SHARED_LIBS)
-        if (NOT DEFINED IGE_ROOT)
-          set(IGE_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../..)
-        endif()
-        set (PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/Include")
+        set (PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Include")
         set (NUMPY_INCLUDE_DIRS 
-                "${IGE_ROOT}/igeLibs/numpy/include"
-                "${IGE_ROOT}/igeLibs/numpy/include/numpy"
-                "${IGE_ROOT}/igeLibs/numpy/include/numpy/core"
-                "${IGE_ROOT}/igeLibs/numpy/include/numpy/core/include"
-                "${IGE_ROOT}/igeLibs/numpy/include/numpy/core/include/numpy"
-                "${IGE_ROOT}/igeLibs/numpy/include/numpy/core/include/numpy/random"
+                "${IGE_LIBS}/numpy/include"
+                "${IGE_LIBS}/numpy/include/numpy"
+                "${IGE_LIBS}/numpy/include/numpy/core"
+                "${IGE_LIBS}/numpy/include/numpy/core/include"
+                "${IGE_LIBS}/numpy/include/numpy/core/include/numpy"
+                "${IGE_LIBS}/numpy/include/numpy/core/include/numpy/random"
             )
         if (MSVC)
-            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/PC")
+            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/PC")
         elseif (OSX)
-            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/Mac")
+            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Mac")
         elseif (ANDROID)
-            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/Android")
+            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Android")
         elseif (IOS)
-            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_ROOT}/igeLibs/Python/IOS")
+            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/IOS")
         endif ()
         
         set(cv2_src src2/cv2.cpp)

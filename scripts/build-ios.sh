@@ -21,12 +21,8 @@ export PATH="$PATH:/usr/local/bin"
 # export IGE_LIBS=$PROJECT_DIR/../igeLibs
 
 export BUILD_DIR=$PROJECT_DIR/build/ios
-export OUTPUT_DIR=$PROJECT_DIR/igeLibs/$LIB_NAME/libs/ios
-export CMAKE_TOOLCHAIN_FILE=$PROJECT_DIR/igeLibs/cmake/ios.toolchain.cmake
-echo $IGE_LIBS
-if [ ! -d "$PROJECT_DIR/igeLibs" ]; then
-    ln -s "$IGE_LIBS" "$PROJECT_DIR/igeLibs"
-fi
+export OUTPUT_DIR=$IGE_LIBS/$LIB_NAME/libs/ios
+export CMAKE_TOOLCHAIN_FILE=$IGE_LIBS/cmake/ios.toolchain.cmake
 
 [ ! -d "$BUILD_DIR" ] && mkdir -p $BUILD_DIR
 cd $BUILD_DIR
