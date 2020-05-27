@@ -56,7 +56,7 @@ if(DEFINED OPENCV_INITIAL_PASS)  # OpenCV build
     endif()
 # [/IGE]
 
-if(ANDROID OR APPLE_FRAMEWORK OR WINRT)
+if(ANDROID OR APPLE_FRAMEWORK OR WINRT OR (NOT BUILD_SHARED_LIBS))
   ocv_module_disable_(python2)
   ocv_module_disable_(python3)
   return()
