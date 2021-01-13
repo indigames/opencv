@@ -272,7 +272,10 @@ public:
         }
 
         cv::transpose(out, out);
-        cv::flip(out, out, 0);
+        if(index == 0)
+            cv::flip(out, out, 1);
+        else
+            cv::flip(out, out, -1);
         return true;
     }
 
