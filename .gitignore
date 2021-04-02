@@ -23,3 +23,6 @@ bin/
 *.tlog
 build
 /igeLibs
+/_ige_build
+/_ige_release
+/conanfile.py

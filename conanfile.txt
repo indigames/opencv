@@ -1,0 +1,6 @@
+[requires]
+Python/3.7.6@ige/test
+numpy/1.19.5@ige/test
+
+[generators]
+cmake

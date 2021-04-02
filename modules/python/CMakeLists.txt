@@ -4,24 +4,8 @@
 if(DEFINED OPENCV_INITIAL_PASS)  # OpenCV build
 # [IGE]: always build static python binding
     if (NOT BUILD_SHARED_LIBS)
-        set (PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Include")
-        set (NUMPY_INCLUDE_DIRS 
-                "${IGE_LIBS}/numpy/include"
-                "${IGE_LIBS}/numpy/include/numpy"
-                "${IGE_LIBS}/numpy/include/numpy/core"
-                "${IGE_LIBS}/numpy/include/numpy/core/include"
-                "${IGE_LIBS}/numpy/include/numpy/core/include/numpy"
-                "${IGE_LIBS}/numpy/include/numpy/core/include/numpy/random"
-            )
-        if (MSVC)
-            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/PC")
-        elseif (OSX)
-            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Mac")
-        elseif (ANDROID)
-            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/Android")
-        elseif (IOS)
-            list(APPEND PYTHON_INCLUDE_DIRS "${IGE_LIBS}/Python/IOS")
-        endif ()
+        set (PYTHON_INCLUDE_DIRS "${CONAN_INCLUDE_DIRS}")
+        set (NUMPY_INCLUDE_DIRS "${CONAN_INCLUDE_DIRS}")
         
         set(cv2_src src2/cv2.cpp)
         

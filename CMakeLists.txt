@@ -6,8 +6,6 @@
 #
 # ----------------------------------------------------------------------------
 
-file(TO_CMAKE_PATH $ENV{IGE_LIBS} IGE_LIBS)
-
 # [IGE]: tweaks for platforms
 if(DEFINED ANDROID_PLATFORM)
     set (ANDROID 1)
@@ -158,6 +156,13 @@ endif()
 # [/IGE]
 
 project(OpenCV CXX C)
+
+# [IGE]: try include conan build config
+if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup()
+endif()
+# [/IGE]
 
 if(MSVC)
   set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)
