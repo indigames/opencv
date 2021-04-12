@@ -11,7 +11,6 @@ if not exist "!IGE_BUILDER!\.git" (
     mkdir "!IGE_BUILDER!"
     git clone https://github.com/indigames/igeBuilder !IGE_BUILDER!
 ) else (
-    %~d0
     cd !IGE_BUILDER!
     git fetch --all
     git checkout main
@@ -24,10 +23,10 @@ if not exist "!IGE_BUILDER!\build-lib.bat" (
     goto ERROR
 )
 
-if exist "%~dp0..\project.conf" (
-    for /f "usebackq delims=" %%a in ("%~dp0..\project.conf") do (
+if exist "%~dp0..\conanfile.py" (
+    for /f "usebackq delims=" %%a in ("%~dp0..\conanfile.py") do (
         set ln=%%a
-        for /f "tokens=1,2 delims=: " %%b in ("!ln!") do (
+        for /f "tokens=1,2 delims='=' " %%b in ("!ln!") do (
                 set currkey=%%b
                 set currval=%%c
                 
