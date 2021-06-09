@@ -26,12 +26,16 @@ def build(platform, arch):
     except:
         pass
     os.chdir('build')
-    ret_code = os.system(f'conan install --update .. --profile ../cmake/profiles/{platform}_{arch} --remote ige-center')
+    ret_code = os.system(f'conan install --update .. --profile ../cmake/profiles/{platform}_{arch}')
     if ret_code != 0:
         exit(1)
 
     os.chdir('..')
     ret_code = os.system('conan build . --build-folder build')
+    if ret_code != 0:
+        exit(1)
+
+    ret_code = os.system(f'conan export-pkg . {IgeConan.name}/{IgeConan.version}@ige/test --build-folder build --force')
     if ret_code != 0:
         exit(1)
 
@@ -47,8 +51,9 @@ def main():
     elif platform.system() == 'Darwin':
         build('macos', 'x86_64')
         build('ios', 'armv8')
-    ret_code = os.system(f'conan upload {IgeConan.name}/{IgeConan.version}@ige/test --all --remote ige-center --check --confirm --retry 3 --retry-wait 60')
-    exit(ret_code)
+    ret_code = os.system(f'conan upload {IgeConan.name}/{IgeConan.version}@ige/test --remote ige-center  --all --check --confirm --retry 3 --retry-wait 60 --force')
+    if ret_code != 0:
+        exit(1)
 
 if __name__ == "__main__":
     main()

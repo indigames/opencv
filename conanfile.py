@@ -17,17 +17,15 @@ class IgeConan(ConanFile):
     exports_sources = ""
     requires = []
     short_paths = True
+    revision_mode="scm"
 
     def requirements(self):
-        if (self.settings.os == "Windows") and (self.name != "zlib"):
-            self.requires("zlib/1.2.11@ige/test")
         self.requires("Python/3.7.6@ige/test")
         self.requires("numpy/1.19.5@ige/test")
 
     def build(self):
         self._generateCMakeProject()
         self._buildCMakeProject()
-        self._package()
 
     def package(self):
         self.copy('*', src='build/install')
@@ -64,11 +62,3 @@ class IgeConan(ConanFile):
         if(error_code != 0):
             print(f'CMake build failed, error code: {error_code}')
             exit(1)
-
-    def _package(self):
-        os.chdir(Path(self.build_folder).parent.absolute())
-        error_code = self.run(f'conan export-pkg . {self.name}/{self.version}@ige/test --profile=cmake/profiles/{str(self.settings.os).lower()}_{str(self.settings.arch).lower()} --force', ignore_errors=True)
-        if(error_code != 0):
-            print(f'Conan export failed, error code: {error_code}')
-            exit(1)
-
