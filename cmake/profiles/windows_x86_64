@@ -1,0 +1,5 @@
+include(default)
+[settings]
+[options]
+[build_requires]
+[env]

@@ -26,3 +26,4 @@ build
 /_ige_build
 /_ige_release
 /conanfile.py
+/__pycache__

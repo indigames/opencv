@@ -1,0 +1,6 @@
+include(default)
+[settings]
+    arch=x86
+[options]
+[build_requires]
+[env]

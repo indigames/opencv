@@ -4,8 +4,11 @@
 if(DEFINED OPENCV_INITIAL_PASS)  # OpenCV build
 # [IGE]: always build static python binding
     if (NOT BUILD_SHARED_LIBS)
-        set (PYTHON_INCLUDE_DIRS "${CONAN_INCLUDE_DIRS}")
-        set (NUMPY_INCLUDE_DIRS "${CONAN_INCLUDE_DIRS}")
+        find_package(Python REQUIRED)
+        set (PYTHON_INCLUDE_DIRS "${Python_INCLUDE_DIRS}")
+    
+        find_package(numpy REQUIRED)
+        set (NUMPY_INCLUDE_DIRS "${numpy_INCLUDE_DIRS}")
         
         set(cv2_src src2/cv2.cpp)
         
