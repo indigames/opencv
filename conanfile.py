@@ -30,6 +30,11 @@ class IgeConan(ConanFile):
     def package(self):
         self.copy('*', src='build/install')
 
+    def package_info(self):
+        self.cpp_info.libs = self.__collect_lib()
+        self.cpp_info.includedirs  = self.__collect_include()
+        self.cpp_info.defines = [f'USE_{self.name}'.upper()]
+
     def _generateCMakeProject(self):
         cmake_cmd = f'cmake {self.source_folder}'
         if self.settings.os == "Windows":
@@ -62,3 +67,32 @@ class IgeConan(ConanFile):
         if(error_code != 0):
             print(f'CMake build failed, error code: {error_code}')
             exit(1)
+
+    def __collect_lib(self):
+        libs = []
+        for root, dirs, files in os.walk('lib'):
+            for file in files:
+                if file.endswith(".lib"):
+                    fname = os.path.splitext(file)[0]
+                    libs.append(fname)
+                elif file.endswith(".a"):
+                    fname = os.path.splitext(file)[0]
+                    if fname.startswith('lib'):
+                        fname = fname[fname.find('lib') + 3:]
+                    libs.append(fname)
+        for lib in libs:
+            print(lib + ' ')
+        return libs
+
+    def __collect_include(self):
+        inc_dirs = ['include']
+        platform_inc_dir = ['include', 'src', 'source']
+        if self.settings.os == "Windows":
+            platform_inc_dir += ['pc', 'windows', 'win32', 'msvc']
+        elif self.settings.os == "Android":
+            platform_inc_dir += ['android', 'jni']
+        elif self.settings.os == "Macos":
+            platform_inc_dir += ['macos', 'mac', 'osx']
+        elif self.settings.os == "iOS":
+            platform_inc_dir += ['ios', 'iphone', 'iphoneos']
+        return inc_dirs
