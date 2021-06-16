@@ -40,6 +40,13 @@ if(DEFINED OPENCV_INITIAL_PASS)  # OpenCV build
                         opencv_flann opencv_highgui opencv_imgcodecs opencv_imgproc
                         opencv_ml opencv_objdetect opencv_photo opencv_stitching
                         opencv_video opencv_videoio)
+
+        install(TARGETS
+            cv2_python
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib
+        )
     endif()
 # [/IGE]
 
