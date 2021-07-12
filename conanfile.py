@@ -20,7 +20,7 @@ class IgeConan(ConanFile):
     revision_mode="scm"
 
     def requirements(self):
-        self.requires("Python/3.7.6@ige/test")
+        self.requires("Python/3.9.1@ige/test")
         self.requires("numpy/1.19.5@ige/test")
 
     def build(self):
